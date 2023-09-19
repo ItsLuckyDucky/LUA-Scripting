@@ -4,7 +4,7 @@
 @description Builds within Fort Forinthy
 @author Asoziales <discord@Asoziales>
 @date 18/09/2023
-@version 1.0
+@version 1.1 ~ cleaned code
 
 Message on Discord for any Errors or Bugs
 Credit to @higginshax for UI Template and some funcs
@@ -51,10 +51,7 @@ end
 function findobjtile() -- Iterates data from the optimal location
     Right = API.GetAllObjArray1({125061}, 20, 0);
     for _k, v in pairs(Right) do
-        s = true
-        if (s) then
             return v
-        end
     end
     return false
 end
@@ -94,7 +91,6 @@ function aminexttoahotspot() -- sleeps while next to optimal hotspot
     hotspot = findobjtile()
     tile = WPOINT.new(hotspot.CalcX, hotspot.CalcY, 0)
     if round(hotspot.Distance/512, 0) <= 1 then
-        API.RandomSleep2(600,600,1200)
         --print(hotspot.Distance/512, " Tiles away") -- debug
         return true
     end
