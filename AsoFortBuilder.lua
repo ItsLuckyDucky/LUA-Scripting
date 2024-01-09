@@ -3,13 +3,13 @@
 @title AsoFortBuilder
 @description Builds within Fort Forinthy
 @author Asoziales <discord@Asoziales>
-@date 18/09/2023
-@version 1.1 ~ cleaned code
+@date 9/1/2024
+@version 1.2 ~ Updated for new ME Offsets
 
 Message on Discord for any Errors or Bugs
 Credit to @higginshax for UI Template and some funcs
 
-Currently only supports TownHall but can add extra buildings if requested or i decide to add them.
+This version supports TownHall but i can easily add extra buildings if requested.
 
 xp/hr is roughly 720k/hr with con outfit and an aditional 10,646.5 xp/hr in bonus xp from townhall passive
 
@@ -197,6 +197,7 @@ while(API.Read_LoopyLoop()) do
 
 
     ::continue::
+    API.DoRandomEvents()
     printProgressReport()
     API.RandomSleep2(100, 200, 200)
 end
