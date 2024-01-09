@@ -4,7 +4,7 @@
 @description Builds within Fort Forinthy
 @author Asoziales <discord@Asoziales>
 @date 9/1/2024
-@version 1.2 ~ Updated for new ME Offsets
+@version 1.3 ~ fixed Distance finding with new ME logic
 
 Message on Discord for any Errors or Bugs
 Credit to @higginshax for UI Template and some funcs
@@ -29,6 +29,8 @@ startXp = API.GetSkillXP("CONSTRUCTION")
 --[[ Main Script Body ]]--
 
 startTime, afk = os.time(), os.time()
+ state = nil
+ firstrun = true
 
 
 print("Starting AsoFortBuilder! Startxp: " .. startXp)
@@ -49,10 +51,12 @@ local function walktoTHall() -- Walks to the TownHall Building
 end
 
 function findobjtile() -- Iterates data from the optimal location
-    Right = API.GetAllObjArray1({125061}, 20, 0);
+    Right = API.GetAllObjArray1({125061}, 50, 0);
     for _k, v in pairs(Right) do
+        -- print("found")
             return v
     end
+    -- print("false")
     return false
 end
 
@@ -61,7 +65,7 @@ function clickHotspot() -- uses iterated data to determine Optimal Construction 
     hotspot = findobjtile()
     if  hotspot then
         tile = WPOINT.new(hotspot.CalcX, hotspot.CalcY, 0)
-        API.DoAction_Object2(0x29, 0, {hotspot.Id}, 20, tile);
+        API.DoAction_Object2(0x29, 0, {125061}, 30, tile);
         API.RandomSleep2(600, 800, 1000);
         API.WaitUntilMovingEnds()
         return true
@@ -90,7 +94,7 @@ end
 function aminexttoahotspot() -- sleeps while next to optimal hotspot
     hotspot = findobjtile()
     tile = WPOINT.new(hotspot.CalcX, hotspot.CalcY, 0)
-    if round(hotspot.Distance/512, 0) <= 1 then
+    if round(hotspot.Distance, 0) <= 1.5 then
         --print(hotspot.Distance/512, " Tiles away") -- debug
         return true
     end
@@ -163,38 +167,43 @@ function drawGUI()
     DrawProgressBar(IGP)
 end
 
+local function detectOBJ(npcid, distance)
+    local distance = distance or 50
+    return #API.GetAllObjArrayInteract({npcid}, distance, 0) > 0
+end
+
 setupGUI()
 
-while(API.Read_LoopyLoop()) do
+while (API.Read_LoopyLoop()) do
+
     idleCheck()
     drawGUI()
 
-    
-    if API.PInArea(3299,15,3563,15) then -- if in townhall
-        if API.PInArea(3299,15,3563,15) and not findobjtile() then -- and no hotspots are found
+    if API.PInArea(3299, 15, 3563, 15, 0) then
+        if API.PInArea(3299, 15, 3563, 15, 0) and not detectOBJ(125061) then -- and no hotspots are found
             print("no Hotspots found")
             resethotspots()
-        else 
-            if  not aminexttoahotspot() then -- hotspot has moved
+        else
+            if not aminexttoahotspot() then -- hotspot has moved
                 print("Clicking Next Location")
                 clickHotspot()
                 API.WaitUntilMovingEnds()
-                API.RandomSleep2(1800,600,1800)
+                API.RandomSleep2(1800, 600, 1800)
             end
             API.RandomSleep2(600, 300, 600)
             goto continue
         end
-        if not API.PInArea(3299,15,3563,15) then -- not in townhall
+        if not API.PInArea(3299, 15, 3563, 15, 0) then -- not in townhall
             print("not within Townhall Bounds, rectifying")
             walktoTHall()
         end
-    end
 
-    if API.InvItemcountStack_String("Magic frame") <= 59 or API.InvItemcountStack_String("Stone wall segment") <= 5 and not findobjtile() then
-        print("out of resources")
-        break
+        if API.InvItemcountStack_String("Magic frame") <= 59 or API.InvItemcountStack_String("Stone wall segment") <= 5 and
+            not findobjtile() then
+            print("out of resources")
+            break
+        end
     end
-
 
     ::continue::
     API.DoRandomEvents()
