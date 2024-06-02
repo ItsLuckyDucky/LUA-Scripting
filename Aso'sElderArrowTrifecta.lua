@@ -75,7 +75,7 @@ local function feedCereal()
 end
 
 local function burnPropellant()
-    API.KeyboardPress2(0x31, 40, 60)
+    API.DoAction_Inventory2({fertilizer}, 40, 1, API.OFF_ACT_GeneralInterface_route)
     API.RandomSleep2(600, 200, 300)
 end
 
