@@ -6,8 +6,6 @@ completes all the activities in order to make dinoarrows from collecting the shi
 
 Just start in the area of your desired activity and click from the dropdown menu....
 
-dino shit on your '1' keybind is the only thing needed 
-
 Last updated: 12/1/24
 For bugs, errors or feature requests dm @Asoziales on discord
 
