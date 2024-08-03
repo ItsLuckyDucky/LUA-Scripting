@@ -4,7 +4,7 @@
 @description mines gold in the LRC and deposits 
 @author Asoziales <discord@Asoziales>
 @date 03/08/24
-@version 1.0 ~ Initial release
+@version 1.1 ~ Updated Walkable Tiles
 
 Message on Discord for any Errors or Bugs
 
@@ -120,7 +120,7 @@ while (API.Read_LoopyLoop()) do
         end 
         if API.InvFull_() and UTILS.getAmountInOrebox(444) == 100 then
             API.logWarn('Ore Box full Deposting')
-            API.DoAction_WalkerW(WPOINT.new(LOCATIONS.bank.x,LOCATIONS.bank.y,LOCATIONS.bank.z))
+            API.DoAction_WalkerW(WPOINT.new(LOCATIONS.bank.x + math.random(-2, 3),LOCATIONS.bank.y + math.random(-2, 3),LOCATIONS.bank.z))
             API.WaitUntilMovingEnds(20,2)
         end
         if API.InvFull_() == false then loot() end
@@ -148,7 +148,7 @@ while (API.Read_LoopyLoop()) do
         
         if not API.InvFull_() and UTILS.getAmountInOrebox(444) == 0 then
             API.logInfo('Walking back to Gold Deposit')
-            API.DoAction_WalkerW(WPOINT.new(LOCATIONS.rock.x,LOCATIONS.rock.y,LOCATIONS.rock.z))
+            API.DoAction_WalkerW(WPOINT.new(LOCATIONS.rock.x + math.random(-2, 3),LOCATIONS.rock.y + math.random(-2, 3),LOCATIONS.rock.z))
             API.WaitUntilMovingEnds(20,2)
         end
     end
