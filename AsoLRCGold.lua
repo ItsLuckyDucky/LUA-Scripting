@@ -4,7 +4,7 @@
 @description mines gold in the LRC and deposits 
 @author Asoziales <discord@Asoziales>
 @date 03/08/24
-@version 1.1 ~ Updated Walkable Tiles
+@version 1.2 ~ Changed looting Logic
 
 Message on Discord for any Errors or Bugs
 
@@ -104,6 +104,7 @@ end
 
 API.Write_LoopyLoop(true)
 while (API.Read_LoopyLoop()) do
+    ::start::
     local elapsedMinutes = (os.time() - startTime)
     local metrics = {{"Script", "AsoLRCGold - (v" .. version .. ") by Asoziales"}, {"Runtime:", formatElapsedTime(startTime)}, {"Gold deposited:", formatNumber(gold)}
     }
@@ -122,6 +123,7 @@ while (API.Read_LoopyLoop()) do
             API.logWarn('Ore Box full Deposting')
             API.DoAction_WalkerW(WPOINT.new(LOCATIONS.bank.x + math.random(-2, 3),LOCATIONS.bank.y + math.random(-2, 3),LOCATIONS.bank.z))
             API.WaitUntilMovingEnds(20,2)
+            goto start
         end
         if API.InvFull_() == false then loot() end
 
