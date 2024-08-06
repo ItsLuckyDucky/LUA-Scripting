@@ -4,7 +4,8 @@
 @description Siphons Wisps at whatever colony you start at, Prioritizes enriched if available.
 @author Asoziales <discord@Asoziales>
 @date 06/08/2024
-@version 1.1 ~ Updated antiidle
+@version 1.2 ~ fixed unique errors when dunking
+@Credits to dead for ID Table
 
 Message on Discord for any Errors or Bugs
 
@@ -115,7 +116,7 @@ end
 
 function dunkmaster()
     if API.InvFull_() then
-        API.DoAction_Object1(0xc8,API.OFF_ACT_GeneralObject_route0,IDS.RIFTS,50)
+        API.DoAction_Object_string1(0xc8, API.OFF_ACT_GeneralObject_route0, { "Energy rift", "Energy Rift" }, 50,true) 
         API.WaitUntilMovingandAnimEnds(50,2)
     end
 end
