@@ -4,7 +4,7 @@
 @description Siphons Wisps at whatever colony you start at, Prioritizes enriched if available.
 @author Asoziales <discord@Asoziales>
 @date 06/08/2024
-@version 1.0 ~ Initial release
+@version 1.1 ~ Updated antiidle
 
 Message on Discord for any Errors or Bugs
 
@@ -70,6 +70,16 @@ local IDS = {
     }
 }
 
+function idleCheck()
+    local timeDiff = os.difftime(os.time(), afk)
+    local randomTime = math.random((MAX_IDLE_TIME_MINUTES * 60) * 0.6, (MAX_IDLE_TIME_MINUTES * 60) * 0.9)
+
+    if timeDiff > randomTime then
+        API.PIdle2()
+        afk = os.time()
+    end
+end
+
 function foundNPC(npcid)
     return #API.ReadAllObjectsArray({1}, npcid, {}) > 0
 end
@@ -117,6 +127,7 @@ while API.Read_LoopyLoop() do
     API.DoRandomEvents()
     gather()
     dunkmaster()
+    idleCheck()
     API.RandomSleep2(200,300,200)
 end
 
