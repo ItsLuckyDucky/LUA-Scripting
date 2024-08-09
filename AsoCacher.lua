@@ -4,11 +4,11 @@
 @description Gathers from Material Caches 
 @author Asoziales <discord@Asoziales>
 @date 10/07/2024
-@version 1.0 ~ Initial Beta release
+@version 1.1 ~ Testing new function for porter charges using memory shards
 
 Message on Discord for any Errors or Bugs
 
-Make sure you are wearing a Grace of the Elves and have any porters in inventory if using porters
+Make sure you are wearing a Grace of the Elves and have any porters in inventory if using porters or memory shards
 
 --]]
 
@@ -213,6 +213,56 @@ local function openBank()
     API.DoAction_Object1(0x2e, API.OFF_ACT_GeneralObject_route1, {115427}, 50)
 end
 
+local function keepGOTEcharged()
+
+    local buffStatus = API.Buffbar_GetIDstatus(51490, false)
+    local stacks = tonumber(buffStatus.text)
+
+    local function findporters()
+        local portersIds = {51490, 29285, 29283, 29281, 29279, 29277, 29275}
+        local porters = API.CheckInvStuff3(portersIds)
+        local foundIdx = -1
+        for i, value in ipairs(porters) do
+            if tostring(value) == '1' then
+                foundIdx = i
+                break
+            end
+        end
+        if foundIdx ~= -1 then
+            local foundId = portersIds[foundIdx]
+            if foundId <= 51490 then
+                return foundId
+            else
+                return nil
+            end
+        else
+            return nil
+        end
+    end
+
+    if stacks and stacks <= 50 and findporters() then
+        print("Recharging GOTE")
+        API.DoAction_Interface(0xffffffff, 0xae06, 6, 1464, 15, 2, API.OFF_ACT_GeneralInterface_route2)
+        API.RandomSleep2(600, 600, 600)
+        return
+    end
+    if stacks and stacks <= 50 and findporters() == nil then
+        API.DoAction_Inventory1(39488, 0, 1, API.OFF_ACT_GeneralInterface_route)
+        API.RandomSleep2(600, 300, 600)
+        API.DoAction_Interface(0xffffffff, 0xffffffff, 1, 1371, 22, 13, API.OFF_ACT_GeneralInterface_route)
+        API.RandomSleep2(600, 200, 600)
+        API.DoAction_Interface(0xffffffff, 0xffffffff, 0, 1370, 30, -1, API.OFF_ACT_GeneralInterface_Choose_option)
+        API.RandomSleep2(600, 300, 500)
+        ::loop::
+        if API.isProcessing() then
+            API.RandomSleep2(200, 300, 200)
+            goto loop
+        end
+        API.DoAction_Interface(0xffffffff, 0xae06, 6, 1464, 15, 2, API.OFF_ACT_GeneralInterface_route2)
+        return
+    end
+end
+
 local function Bank()
 
     API.logWarn("Not implemented ggez")
@@ -376,30 +426,16 @@ while (API.Read_LoopyLoop()) do
         end
         goto continue
     end
-    -------------END UI 
-    -- if firstRun then
-    --     print("!!! Startup Check Failed !!!")
-    --     API.logError("!!! Startup Check Failed !!!")
-    --     if #errors > 0 then
-    --         print("Errors:")
-    --         API.logError("Errors:")
-    --         for _, errorMsg in ipairs(errors) do
-    --             print("- " .. errorMsg)
-    --             API.logError("- " .. errorMsg)
-    --         end
-    --     end
-    --     API.Write_LoopyLoop(false)
-    --     break
-    -- end
 
     if not isMoving() and not API.CheckAnim(40) then
         if API.InvFull_() then
             if HasAutoScreener() and usePorters then
-                if porterCheck() then
-                    API.DoAction_Interface(0xffffffff, 0xae06, 6, 1464, 15, 2, API.OFF_ACT_GeneralInterface_route2)
-                end
-            else
-                Logout()
+                -- if porterCheck() then
+                --     API.DoAction_Interface(0xffffffff, 0xae06, 6, 1464, 15, 2, API.OFF_ACT_GeneralInterface_route2)
+                -- end
+                keepGOTEcharged()
+                elseif not porterCheck() and not API.InvItemFound1(39488) then
+                    Logout()
             end
             API.RandomSleep2(600, 200, 300)
         else
