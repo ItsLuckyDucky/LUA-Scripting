@@ -4,7 +4,7 @@
 @description Gathers from Material Caches 
 @author Asoziales <discord@Asoziales>
 @date 10/07/2024
-@version 1.1 ~ Testing new function for porter charges using memory shards
+@version 1.2 ~ Added Third Age Iron
 
 Message on Discord for any Errors or Bugs
 
@@ -54,6 +54,10 @@ local CacheData = {{
     label = "Hellfire metal",
     CACHEID = 116426,
     MATERIALID = 49504
+}, {
+    label = "Third Age Iron",
+    CACHEID = 115426,
+    MATERIALID = 49460
 }}
 
 ID = {
@@ -156,6 +160,8 @@ local function CachetoGather()
         Material = "Blood of Orcus"
     elseif (aioSelectC.string_value == "Hellfire metal") then
         Material = "Hellfire metal"
+    elseif (aioSelectC.string_value == "Third Age Iron") then
+        Material = "Third Age Iron"
     end
 end
 
