@@ -4,7 +4,7 @@
 @description Gathers from Material Caches 
 @author Asoziales <discord@Asoziales>
 @date 10/07/2024
-@version 1.2 ~ Added Third Age Iron
+@version 1.3 ~ Added counting for Sash brush
 
 Message on Discord for any Errors or Bugs
 
@@ -23,7 +23,7 @@ local depositAttempt = 0
 
 local skill = "ARCHAEOLOGY"
 startXp = API.GetSkillXP(skill)
-local version = "1.0"
+local version = "1.3"
 local Material = ""
 local selectedCache = nil
 local selectedMaterial = nil
@@ -58,6 +58,14 @@ local CacheData = {{
     label = "Third Age Iron",
     CACHEID = 115426,
     MATERIALID = 49460
+}, {
+    label = "Carbon Black",
+    CACHEID = 118951,
+    MATERIALID = 50686
+}, {
+    label = "Felt",
+    CACHEID = 118956,
+    MATERIALID = 50692
 }}
 
 ID = {
@@ -162,6 +170,10 @@ local function CachetoGather()
         Material = "Hellfire metal"
     elseif (aioSelectC.string_value == "Third Age Iron") then
         Material = "Third Age Iron"
+    elseif (aioSelectC.string_value == "Carbon Black") then
+        Material = "Carbon Black"
+    elseif (aioSelectC.string_value == "Felt") then
+        Material = "Felt"
     end
 end
 
@@ -333,7 +345,9 @@ local function MaterialCounter()
             if k > 2 then
                 break
             end
-            if string.find(v.text, "You transport the following item to your") then
+            if string.find(v.text, "Balarak's sash brush perfectly") then
+                matcount = matcount + 1
+             elseif string.find(v.text, "You transport the following item to your") then
                 matcount = matcount + 1
                 -- else if string.find(v.text, "The Seren spirit gifts you: 1X") then
                 --     blurb = blurb + 1
